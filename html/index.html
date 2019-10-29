@@ -1,0 +1,299 @@
+<!-- Zachary Huang
+zhuang333@wisc.edu -->
+
+<!DOCTYPE html>
+<html>
+<body>
+  <div class="panel-heading"> Disguised Missing Value Detector
+      <div class="clearfix"></div>
+  </div>
+  <p id="demo"></p>
+  <p id="divvk"></p>
+  <p id="divv"></p>
+  <div class="panel panel-info">
+
+    <script type="text/javascript">
+    function myFunction(input) {
+      var reader = new FileReader();
+      reader.onload = function () {
+          var allLines = reader.result.split("\n");
+
+            // do what you want with the result
+            // ie: split lines and show the first line
+
+          var lineOne = allLines[0];
+          var attributes = lineOne.split(",");
+          var myNode = document.getElementById('mySelect');
+          while (myNode.firstChild) {
+              myNode.removeChild(myNode.firstChild);
+          }
+          for (index = 0; index < attributes.length; ++index) {
+            // get reference to select element
+            var sel = document.getElementById('mySelect');
+            // create new option element
+            var opt = document.createElement('option');
+            // create text node to add to option element (opt)
+            opt.appendChild( document.createTextNode(attributes[index]) );
+            // set value property of opt
+            opt.value = attributes[index];
+            // add opt to end of select box (sel)
+            sel.appendChild(opt);
+          }
+          var table = "<h2>Table Preview</h2> <table>";
+
+          var num = 30
+          if (allLines.length < num){
+            num = allLines.length
+          }
+          for (i = 0; i < num; i++){
+            content = allLines[i].split(",")
+            table = table.concat("<tr>");
+            for (j = 0; j < content.length; j++){
+              var str = content[j]
+              if (res = content[j].charAt(0) == "\""){
+                for(;;){
+                  if(content[j].charAt(content[j].length - 1) != "\""){
+                    j++
+                    str = str.concat(content[j]);
+                  }
+                  else {
+                    break;
+                  }
+                }
+              };
+
+              table = table.concat("<th>");
+              table = table.concat(str);
+              table = table.concat("</th>");
+            }
+            table = table.concat("</tr>");
+          };
+          table = table.concat("</table>");
+          document.getElementById('divv').innerHTML = table;
+
+      };
+      // start reading the file. When it is done, calls the onload event defined above.
+      reader.readAsBinaryString(input.files[0]);
+
+    }
+    function myFunction2(input) {
+      var value = input.value
+      if (value  == ""){
+        return
+      }
+      console.log(value);
+      var xhr2 = new XMLHttpRequest();
+      xhr2.open("GET", "http://a7648f6f5702911e98ea412ac368fc7a-1169430973.us-east-1.elb.amazonaws.com/file-content/?file_name=" + value, true);
+      xhr2.setRequestHeader("Authorization", "Bearer " + accesst);
+      xhr2.onreadystatechange = function() { // Call a function when the state changes.
+
+          // var string = "\"PropertyObservationId,EntityName,EntityNameKey,EntityIdentifier,MunicipalityName,State,PropertyName,PropertyNameKey,ShapeId,ShapeGroup,ShapeIsEmpty\\n14428\"";
+          // console.log(typeof  string);
+          // var allLines = string.split("\\n");
+          // //var allLines = this.responseText.split("\n");
+          // console.log(string);
+          // console.log(allLines);
+          var string = this.responseText;
+          console.log(typeof  string);
+          var string = string.toString().substring(1, string.length-1);
+          var allLines = string.split("\\n");
+          console.log(string);
+          console.log(allLines);
+
+            // do what you want with the result
+            // ie: split lines and show the first line
+
+          var lineOne = allLines[0];
+          var attributes = lineOne.split(",");
+          var myNode = document.getElementById('mySelect');
+          while (myNode.firstChild) {
+              myNode.removeChild(myNode.firstChild);
+          }
+          for (index = 0; index < attributes.length; ++index) {
+            // get reference to select element
+            var sel = document.getElementById('mySelect');
+            // create new option element
+            var opt = document.createElement('option');
+            // create text node to add to option element (opt)
+            opt.appendChild( document.createTextNode(attributes[index]) );
+            // set value property of opt
+            opt.value = attributes[index];
+            // add opt to end of select box (sel)
+            sel.appendChild(opt);
+          }
+          var table = "<h2>Table Preview</h2> <table>";
+
+          var num = 30
+          if (allLines.length < num){
+            num = allLines.length
+          }
+          for (i = 0; i < num; i++){
+            content = allLines[i].split(",")
+            table = table.concat("<tr>");
+            for (j = 0; j < content.length; j++){
+              var str = content[j]
+              if (res = content[j].charAt(0) == "\""){
+                for(;;){
+                  if(content[j].charAt(content[j].length - 1) != "\""){
+                    j++
+                    str = str.concat(content[j]);
+                  }
+                  else {
+                    break;
+                  }
+                }
+              };
+
+              table = table.concat("<th>");
+              table = table.concat(str);
+              table = table.concat("</th>");
+            }
+            table = table.concat("</tr>");
+          };
+          table = table.concat("</table>");
+          document.getElementById('divv').innerHTML = table;
+          document.getElementById("csvf").value = string;
+        }
+      xhr2.send()
+
+    }
+    url_string =  window.location.href;
+    var url = new URL(url_string);
+    var c = url.searchParams.get("code");
+    var sel = false
+    var resp
+    var accesst
+    if(c != null){
+      console.log(c);
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "http://a250afd7c6eba11e98ea412ac368fc7a-312971903.us-east-1.elb.amazonaws.com/o/token/", true);
+
+      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+      xhr.onreadystatechange = function() { // Call a function when the state changes.
+          console.log(this.responseText);
+          if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            var jsonResponse = JSON.parse(this.responseText);
+            accesst = jsonResponse["access_token"];
+            var xhr2 = new XMLHttpRequest();
+            xhr2.open("GET", "http://a7648f6f5702911e98ea412ac368fc7a-1169430973.us-east-1.elb.amazonaws.com/list/", true);
+            xhr2.setRequestHeader("Authorization", "Bearer " + accesst);
+            xhr2.onreadystatechange = function() { // Call a function when the state changes.
+                console.log(this.responseText);
+                resp = JSON.parse(JSON.parse(JSON.stringify(this.responseText)));
+                console.log(resp);
+                sel = true
+              }
+            xhr2.send()
+          }
+      }
+      var message = "grant_type=authorization_code&code=" + c +"&state=1234xyz&redirect_uri=http://0.0.0.0&client_id=TBBXGmN7o0Ohg2kZJ30QVwaojqEMFVdk7BjZmxiY&client_secret=ivImI1jLdhv3o7pJoSUQmttkkIkzgGquUqzwtlN0sD6bpQivKXFKIZKwGt5pvH7BJveygMnnfYadbl4OVj3Qc45szLo9X9vJYgmkQfTUpS37jVzgo8JhFSAulF20gvUp"
+      xhr.send(message)
+           //Send the proper header information along with the request);
+    }
+    setTimeout(function (){
+
+      var f = document.createElement("form");
+      f.setAttribute('target',"_blank");
+      f.setAttribute('enctype',"multipart/form-data");
+      f.setAttribute('action',"/cgi-bin/generate2.py");
+      f.setAttribute('method',"post");
+
+      if (!sel){
+        window.location = "http://a250afd7c6eba11e98ea412ac368fc7a-312971903.us-east-1.elb.amazonaws.com/o/authorize/?response_type=code&client_id=TBBXGmN7o0Ohg2kZJ30QVwaojqEMFVdk7BjZmxiY&redirect_uri="+window.location.href+"&state=1234xyz";
+        var i = document.createElement("input");
+        i.setAttribute('id',"csvfile");
+        i.setAttribute('type',"file");
+        i.setAttribute('name',"filename1");
+        i.setAttribute('onchange',"myFunction(this)");
+        i.required="required";
+      }
+      else{
+        var i = document.createElement("select");
+        i.setAttribute('id',"csvfile");
+        i.setAttribute('name',"filename1");
+        i.setAttribute('onchange',"myFunction2(this)");
+        i.prepend(new Option('', '', true, true))
+        for (it = 0; it < resp.length; it++) {
+          var opt = document.createElement('option');
+          // create text node to add to option element (opt)
+          opt.appendChild( document.createTextNode(resp[it]["file_name"]));
+          // set value property of opt
+          opt.value = resp[it]["file_name"];
+          // add opt to end of select box (sel)
+          i.appendChild(opt);
+        }
+        i.required="required";
+
+        var csvf = document.createElement("input");
+        csvf.setAttribute('id',"csvf");
+        csvf.setAttribute('type',"hidden");
+        csvf.setAttribute('name',"filename2");
+        csvf.required="required";
+        f.appendChild(csvf);
+      }
+
+
+      var s = document.createElement("select");
+      s.setAttribute('id',"mySelect");
+      s.setAttribute('name',"column");
+      s.required="required";
+
+      var sub = document.createElement("input");
+      sub.setAttribute('type',"submit");
+      sub.setAttribute('value',"Upload");
+
+      f.appendChild(i);
+      f.appendChild(document.createElement("p"));
+      f.appendChild(s);
+      f.appendChild(document.createElement("p"));
+      f.appendChild(sub);
+
+      document.getElementById('divvk').appendChild(f);
+
+      var p2 = "<p>Upload CSV table File:</p>";
+      document.getElementById("csvfile").insertAdjacentHTML('beforebegin', p2);
+      var p3 = "<p>Select Column for DMV:</p>";
+      document.getElementById("mySelect").insertAdjacentHTML('beforebegin', p3);
+
+    }, 1000);
+
+
+
+    </script>
+
+      <!-- <div class="panel-body">
+        <form target="_blank" enctype = "multipart/form-data"
+                          action = "/cgi-bin/generate2.py" method = "post">
+        <div>
+        <p>Upload CSV table File: <input  id="csvfile" type = "file" required name = "filename1" onchange="myFunction(this)" /></p>
+        <p>Select Column for DMV<select id="mySelect" name="column" required>
+        </select>
+        <p><input type = "submit" value = "Upload" /></p></p>
+
+        </form>
+      </div>
+  </div> -->
+
+  <style>
+  table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  }
+
+  td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+  }
+
+  tr:nth-child(even) {
+  background-color: #dddddd;
+  }
+  </style>
+
+
+</body>
+
+</html>

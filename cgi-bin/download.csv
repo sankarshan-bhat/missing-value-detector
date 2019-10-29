@@ -1,0 +1,19 @@
+#!/usr/bin/python3.6
+# Zachary Huang
+# zhuang333@wisc.edu
+import cgi, os
+import cgitb; cgitb.enable()
+import traceback
+
+form = cgi.FieldStorage()
+
+data = form['csvfile'].value
+
+data = data.replace("<p>", "")
+data = data.replace("</p>", "\n")
+
+
+print ("""\
+Content-Type: text/csv\n
+%s
+""" % (data,))
