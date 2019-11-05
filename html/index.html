@@ -166,7 +166,7 @@ zhuang333@wisc.edu -->
     if(c != null){
       console.log(c);
       var xhr = new XMLHttpRequest();
-      xhr.open("POST", "http://a250afd7c6eba11e98ea412ac368fc7a-312971903.us-east-1.elb.amazonaws.com/o/token/", true);
+      xhr.open("POST", "http://authentication.columbusecosystem.com/o/token/", true);
 
       xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
@@ -176,7 +176,7 @@ zhuang333@wisc.edu -->
             var jsonResponse = JSON.parse(this.responseText);
             accesst = jsonResponse["access_token"];
             var xhr2 = new XMLHttpRequest();
-            xhr2.open("GET", "http://a7648f6f5702911e98ea412ac368fc7a-1169430973.us-east-1.elb.amazonaws.com/list/", true);
+            xhr2.open("GET", "https://api.cdrive.columbusecosystem.com/list/", true);
             xhr2.setRequestHeader("Authorization", "Bearer " + accesst);
             xhr2.onreadystatechange = function() { // Call a function when the state changes.
                 console.log(this.responseText);
@@ -200,7 +200,7 @@ zhuang333@wisc.edu -->
       f.setAttribute('method',"post");
 
       if (!sel){
-        window.location = "http://a250afd7c6eba11e98ea412ac368fc7a-312971903.us-east-1.elb.amazonaws.com/o/authorize/?response_type=code&client_id=TBBXGmN7o0Ohg2kZJ30QVwaojqEMFVdk7BjZmxiY&redirect_uri="+window.location.href+"&state=1234xyz";
+        window.location = "https://authentication.columbusecosystem.com/o/authorize/?response_type=code&client_id=TBBXGmN7o0Ohg2kZJ30QVwaojqEMFVdk7BjZmxiY&redirect_uri="+window.location.href+"&state=1234xyz";
         var i = document.createElement("input");
         i.setAttribute('id',"csvfile");
         i.setAttribute('type',"file");
